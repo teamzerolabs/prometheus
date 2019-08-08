@@ -449,17 +449,8 @@ func mutateSampleLabels(lset labels.Labels, target *Target, honor bool, rc []*re
 		}
 	} else {
 		for _, l := range target.Labels() {
-			lv := lset.Get(l.Name)
-			if lv != "" {
-				lb.Set(model.ExportedLabelPrefix+l.Name, lv)
-			}
+			lb.Set(model.ExportedLabelPrefix+l.Name, lset.Get(l.Name))
 			lb.Set(l.Name, l.Value)
-		}
-	}
-
-	for _, l := range lb.Labels() {
-		if l.Value == "" {
-			lb.Del(l.Name)
 		}
 	}
 
@@ -476,10 +467,7 @@ func mutateReportSampleLabels(lset labels.Labels, target *Target) labels.Labels 
 	lb := labels.NewBuilder(lset)
 
 	for _, l := range target.Labels() {
-		lv := lset.Get(l.Name)
-		if lv != "" {
-			lb.Set(model.ExportedLabelPrefix+l.Name, lv)
-		}
+		lb.Set(model.ExportedLabelPrefix+l.Name, lset.Get(l.Name))
 		lb.Set(l.Name, l.Value)
 	}
 
