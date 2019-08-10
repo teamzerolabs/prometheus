@@ -23,6 +23,7 @@ import (
 	"sort"
 	"strings"
 	"time"
+	"encoding/json"
 
 	html_template "html/template"
 	text_template "text/template"
@@ -129,6 +130,13 @@ func NewTemplateExpander(
 					return v[0], nil
 				}
 				return nil, errors.New("first() called on vector with no elements")
+			},
+			"json": func(v interface{}) (string, error) {
+				b, err := json.Marshal(v)
+				if err != nil {
+					return "", errors.New("json() failed on data passed in")
+				}
+				return string(b), nil
 			},
 			"label": func(label string, s *sample) string {
 				return s.Labels[label]
